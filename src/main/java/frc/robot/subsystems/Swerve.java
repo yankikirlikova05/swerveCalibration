@@ -31,7 +31,7 @@ public class Swerve extends SubsystemBase {
   private boolean isCalibrating;
   private boolean offsetCalibration = true;
   private boolean driveCalibration = false;
-  private boolean rotCalibration = false;
+  private boolean rotCalibration = true;
 
   private final Field2d field2D = new Field2d();
   
@@ -56,13 +56,15 @@ public class Swerve extends SubsystemBase {
 
   private SwerveModule[] modules = new SwerveModule[] {
     new SwerveModule(new TalonFX(11), new TalonFX(16), new DutyCycleEncoder( new DigitalInput(2)), Rotation2d.fromDegrees(140)), //! Front Left
-    new SwerveModule(new TalonFX(10), new TalonFX(12), new DutyCycleEncoder( new DigitalInput(5) ), Rotation2d.fromDegrees(-15)), //! Front Right
+    new SwerveModule(new TalonFX(10), new TalonFX(12), new DutyCycleEncoder( new DigitalInput(5) ), Rotation2d.fromDegrees(-12)), //! Front Right
     new SwerveModule(new TalonFX(0), new TalonFX(13), new DutyCycleEncoder(new DigitalInput(3) ), Rotation2d.fromDegrees(61)), //! Back Left
     new SwerveModule(new TalonFX(14), new TalonFX(15), new DutyCycleEncoder( new DigitalInput(4) ), Rotation2d.fromDegrees(142))  //! Back Right
   };
   public Swerve(boolean isCalibrating) {
     this.isCalibrating = isCalibrating;
     resetAllEncoders();
+    //when setpoint goes back and forth between -0 and 0, the oscillation happens
+    
     SmartDashboard.putData("Field", field2D);
   }
   public Rotation2d getHeading(){
@@ -84,7 +86,7 @@ public class Swerve extends SubsystemBase {
   public void resetAllEncoders(){
     for (int i = 0; i < modules.length; i++) {
       SwerveModule module = modules[i];
-      module.resetBothEncoders();
+      module.resetRotationEncoder();
     }
   }
 

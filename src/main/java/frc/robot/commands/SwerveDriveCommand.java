@@ -35,9 +35,10 @@ public class SwerveDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    final var xSpeed = joystick.getRawAxis(1) * Constants.Swerve.kMaxSpeed * 0.2;
-    final var ySpeed = joystick.getRawAxis(0) * Constants.Swerve.kMaxSpeed * 0.2;
-    final var rot =  joystick.getRawAxis(2) * Constants.Swerve.kMaxAngularSpeed;
+    final var xSpeed = xSpeedLimiter.calculate(joystick.getRawAxis(1) * Constants.Swerve.kMaxSpeed);
+    
+    final var ySpeed = ySpeedLimiter.calculate(joystick.getRawAxis(0) * Constants.Swerve.kMaxSpeed );
+    final var rot = rotLimiter.calculate( joystick.getRawAxis(2) * Constants.Swerve.kMaxAngularSpeed) ;
     boolean fieldRelative = false;
     swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldRelative);
 

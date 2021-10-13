@@ -32,7 +32,7 @@ public class SwerveModule {
   private static final double kDriveS = 0.0;
   private static final double kDriveV = 0.0;
 
-  private static final double kAngleP = 0.017;
+  private static final double kAngleP = 0.035;
   private static final double kAngleI = 0.0;
   private static final double kAngleD = 0.0;
   private static final double kAngleS = 0.0;
@@ -76,11 +76,15 @@ public class SwerveModule {
     this.rotEncoder = rotEncoder;
     this.offset = offset;
     
-    rotEncoder.setDistancePerRotation(360.0/kEncoderTicksPerRotation);
+    //rotEncoder.setDistancePerRotation(360.0/kEncoderTicksPerRotation);
+    rotPID.enableContinuousInput(-178,  178);
   }
 
   public double getDegrees(){
-    return Math.IEEEremainder((rotEncoder.get() * 360.0 + offset.getDegrees()), 360.0);
+    return Math.IEEEremainder((rotEncoder.get() * 360. + offset.getDegrees()),
+     360.);
+     //return rotEncoder.get() * 360. + offset.getDegrees()  ;
+    //return Math.IEEEremainder((rotEncoder.get() * 360.0 + offset.getDegrees()), 360.0);
     // ! Offset usage may be wrong
   }
 
@@ -91,9 +95,8 @@ public class SwerveModule {
   public SwerveModuleState getState() {
     return new SwerveModuleState(
       getDriveMotorRate(), 
-      new Rotation2d(
-        getDegrees() 
-      ));
+      getAngle()
+      );
   }
 
   /**
@@ -109,7 +112,8 @@ public class SwerveModule {
 
   public void calibrate(String Name, boolean offsetCalibration, boolean driveCalibration, boolean rotCalibration){
     if(offsetCalibration){
-      SmartDashboard.putNumber(Name + " Rot Encoder Value", getDegrees());
+      SmartDashboard.putNumber(Name + " Rot Encoder Value", getAngle().getDegrees());
+      SmartDashboard.putNumber(Name + " PID Setpoint", rotPID.getGoal().position);
     }
     // ? all the values below should be tunable in Glass
     if(rotCalibration){
@@ -138,21 +142,28 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     Rotation2d currentRotation = getAngle();
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
+    //System.out.println("Desired Angle" + desiredState.angle.getDegrees());
+    //System.out.println("Actual Angle" + getAngle());
     // Find the difference between our current rotational position + our new rotational position
     Rotation2d rotationDelta = state.angle.minus(currentRotation);
 
     double desiredRotation = currentRotation.getDegrees() + rotationDelta.getDegrees();
 
+    if (Math.abs(desiredRotation) <  0.2 ){
+      desiredRotation = 0;
+    }
+
     angleMotor.set(TalonFXControlMode.PercentOutput, 
         MathUtil.clamp( 
           ( rotPID.calculate(
                 currentRotation.getDegrees(),
-                desiredRotation
+                desiredRotation 
                 ) +
                 rotFeedforward.calculate(rotPID.getSetpoint().velocity) ), 
             -1.0, 
             1.0)
     );
+    //SmartDashboard.putNumber("setpoint", desiredRotation);
 
     //TODO Current drive motor is not using PID, FIXME
     //https://github.com/wpilibsuite/allwpilib/blob/main/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/examples/swervebot/SwerveModule.java
