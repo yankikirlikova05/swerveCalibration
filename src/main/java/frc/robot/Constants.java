@@ -40,7 +40,7 @@ public final class Constants {
 		public static final double maxAccelerationMetersPerSecondSq = 0;
 
 	}
-	public static final boolean kGyroReversed = false;
+	public static final boolean kGyroReversed = true;
 	
 
 }

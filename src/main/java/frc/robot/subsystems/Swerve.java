@@ -63,6 +63,7 @@ public class Swerve extends SubsystemBase {
   public Swerve(boolean isCalibrating) {
     this.isCalibrating = isCalibrating;
     resetAllEncoders();
+    gyroAhrs.reset();
     //when setpoint goes back and forth between -0 and 0, the oscillation happens
     
     SmartDashboard.putData("Field", field2D);
@@ -72,9 +73,13 @@ public class Swerve extends SubsystemBase {
         getHeadingDouble()    
         );
   }
+  public AHRS getGyroAhrs() {
+      return gyroAhrs;
+  }
 
   public double getHeadingDouble(){
-    return Math.IEEEremainder(gyroAhrs.getAngle(), 360.0) * (Constants.kGyroReversed ? -1.0 : 1.0);
+    return gyroAhrs.getAngle();
+    //return Math.IEEEremainder(gyroAhrs.getAngle(), 360.0) * (Constants.kGyroReversed ? -1.0 : 1.0);
   }
 
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(
@@ -125,8 +130,8 @@ public class Swerve extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //commented the odometry for debugging, uncomment when fully calibrated
-    /*
+    SmartDashboard.putNumber("groAngle", getHeadingDouble());
+    
     odometry.update(
       getHeading(),
       modules[0].getState(), 
@@ -134,7 +139,7 @@ public class Swerve extends SubsystemBase {
       modules[2].getState(), 
       modules[3].getState() 
       );
-      */
+      
 
     field2D.setRobotPose(getPose());
 

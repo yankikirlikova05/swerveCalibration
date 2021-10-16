@@ -39,7 +39,7 @@ public class SwerveDriveCommand extends CommandBase {
     
     final var ySpeed = ySpeedLimiter.calculate(joystick.getRawAxis(0) * Constants.Swerve.kMaxSpeed );
     final var rot = rotLimiter.calculate( joystick.getRawAxis(2) * Constants.Swerve.kMaxAngularSpeed) ;
-    boolean fieldRelative = false;
+    boolean fieldRelative = true;
     swerveSubsystem.drive(xSpeed, ySpeed, rot, fieldRelative);
 
   }

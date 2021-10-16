@@ -21,7 +21,7 @@ import frc.robot.subsystems.Swerve;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  Swerve swerveDrivetrain = new Swerve(true);
+  Swerve swerveDrivetrain = new Swerve(false);
   Joystick driver = new Joystick(0);
   SwerveDriveCommand driveCommand = new SwerveDriveCommand(swerveDrivetrain, driver);
 
