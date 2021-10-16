@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.ShooterPID;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,6 +26,9 @@ public class RobotContainer {
   Swerve swerveDrivetrain = new Swerve(false);
   Joystick driver = new Joystick(0);
   SwerveDriveCommand driveCommand = new SwerveDriveCommand(swerveDrivetrain, driver);
+
+  public Shooter shooter = new Shooter();
+  public ShooterPID shooterpid = new ShooterPID(shooter);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -38,6 +43,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(driver, 3).whileHeld(shooterpid);
 
     swerveDrivetrain.setDefaultCommand(driveCommand);
    
