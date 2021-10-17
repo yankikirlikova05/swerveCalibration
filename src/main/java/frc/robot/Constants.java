@@ -32,6 +32,25 @@ public final class Constants {
 		public static final Constraints kThetaControllerConstraints = null;
 		public static final double kP_YController = 0;
 		public static final double kP_XController = 0;
+		
+		public static final class AutoPID {
+			public static final class XLocationParams {
+				public static final double kP = 0.1;
+				public static final double kI = 0;
+				public static final double kD = 0;
+			} 
+			public static final class YLocationParams {
+				public static final double kP = 0.1;
+				public static final double kI = 0;
+				public static final double kD = 0;
+			} 
+			public static final class HeadingParams {
+				public static final double kP = 70/360;
+				public static final double kI = 0;
+				public static final double kD = 0;
+			} 
+		}
+	
 	}
 
 	public static final class Trajectory{

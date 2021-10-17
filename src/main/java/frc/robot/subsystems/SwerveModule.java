@@ -91,7 +91,7 @@ public class SwerveModule {
     //return Math.IEEEremainder((rotEncoder.get() * 360.0 + offset.getDegrees()), 360.0);
     // ! Offset usage may be wrong
   }
-
+    // TODO TEST
   public double getDriveMotorRate(){
     return ((driveMotor.getSelectedSensorVelocity() * 10) / 2048.0) * wheelCircumference;
   }
