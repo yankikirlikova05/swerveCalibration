@@ -5,14 +5,20 @@
 package frc.robot.commands;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 
 public class AutoShoot extends CommandBase {
   /** Creates a new AutoShoot. */
@@ -26,6 +32,9 @@ public class AutoShoot extends CommandBase {
   double pitch;
   double skew;
   Transform2d pose;
+  Translation2d  translation;
+
+  double range;
 
   //TODO ! DISABLE SWERVEDRIVE COMMAND 
   public AutoShoot(LEDSubsystem led,Shooter shooter, Swerve swerve) {
@@ -61,6 +70,23 @@ public class AutoShoot extends CommandBase {
       SmartDashboard.putNumber("Yaw", yaw);
       SmartDashboard.putNumber("Pitch", pitch);
 
+      range = PhotonUtils.calculateDistanceToTargetMeters(
+       Constants.CAMERA_HEIGHT_METERS, 
+       Constants.TARGET_HEIGHT_METERS,
+       Constants.CAMERA_PITCH_RADIANS,
+       Units.degreesToRadians(result.getBestTarget().getPitch()));
+
+       translation = PhotonUtils.estimateCameraToTargetTranslation(range, Rotation2d.fromDegrees(-target.getYaw()));
+
+      Pose2d goal = new Pose2d(translation,
+        new Rotation2d(result.getBestTarget().getPitch(),result.getBestTarget().getYaw()));
+      
+      swerve.goTo(goal);
+       /*Pose2D robotPose = PhotonUtils.estimateFieldToRobot(
+        Constants.CAMERA_HEIGHT_METERS, Constants.TARGET_HEIGHT_METERS, 
+        Constants.CAMERA_PITCH_RADIANS, kTargetPitch, 
+        Rotation2d.fromDegrees(-target.getYaw()), swerve.getHeading(), 
+        targetPose, cameraToRobot);*/
     }
   }
 

@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
+	public static final double CAMERA_HEIGHT_METERS = 0.0;
+	public static final double TARGET_HEIGHT_METERS = 0.0;
+	public static final double CAMERA_PITCH_RADIANS = 0.0;
 
 	public static final class Swerve {
 		public static final double kMaxSpeed = Units.feetToMeters(16.2); // 16.2 feet per second
