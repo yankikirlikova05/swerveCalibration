@@ -27,6 +27,7 @@ public class ShooterPID extends CommandBase {
     shooter.setRPM(6000);
     // shooter.setShooter(0.5);
     SmartDashboard.putNumber("Shooter RPM", shooter.getRPM());
+    SmartDashboard.putNumber("Feedforward Value",shooter.feedforward.calculate(6000));
 
   }
 

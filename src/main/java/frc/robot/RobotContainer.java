@@ -43,7 +43,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driver, 3).whileHeld(shooterpid);
+    // commented out because shooter is broken
+    // new JoystickButton(driver, 3).whileHeld(shooterpid);
 
     swerveDrivetrain.setDefaultCommand(driveCommand);
    

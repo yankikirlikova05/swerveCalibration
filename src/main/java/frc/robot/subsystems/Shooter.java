@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -17,10 +18,10 @@ public class Shooter extends SubsystemBase{
     public static WPI_TalonSRX slaveMotor;
     public Encoder shooterEncoder;
 
-    private double kP = 0.000109; //proportional
+    private double kP = 0.000409; //proportional
     private double kI = 0; //integral
     private double kD = 0.0; //derivative
-    //private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Shooter.kS, Constants.Shooter.kV, Constants.Shooter.kA);
+    public SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.878, 1.18, 0.0106);
     private PIDController pid = new PIDController(kP,kI,kD);
 
     private double ENCODER_EDGES_PER_REV = 4096 / 4.;
@@ -31,7 +32,7 @@ public class Shooter extends SubsystemBase{
         masterMotor = new WPI_TalonSRX(4);
         slaveMotor = new WPI_TalonSRX(9);
         shooterEncoder = new Encoder(0, 1, false);
-        shooterEncoder.setDistancePerPulse(1/(4096/4.0));
+        shooterEncoder.setDistancePerPulse(encoderConstant);
         
         slaveMotor.setInverted(false);
         masterMotor.setInverted(false);
@@ -61,12 +62,12 @@ public class Shooter extends SubsystemBase{
     }
 
     // ? decide whether we should use PIDcommand or setRPM in the subsystem
-    public void setRPM(int rpm){  
-        setShooter(
-          MathUtil.clamp(
-            pid.calculate(getRPM(), rpm),
-            -1,1)
-            );        
+    public void setRPM(int rpm){
+        double ffOutput = feedforward.calculate(rpm);
+        double pidOutput = pid.calculate(getRPM(), rpm);
+        SmartDashboard.putNumber("Shooter FF  Output", ffOutput);
+        SmartDashboard.putNumber("Shooter PID Output", pidOutput);
+        setShooter(MathUtil.clamp(pidOutput, -1, 1));
     }
 
     public void runBackwards(){
