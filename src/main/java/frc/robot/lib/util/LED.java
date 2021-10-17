@@ -11,8 +11,19 @@ public class LED {
 
     private Solenoid led;
 
-    public  LED(int SolenoidPort){
+    public LED(int SolenoidPort){
         led = new Solenoid(SolenoidPort);
+    }
+
+    public void toggle() {
+        if (led.get())
+            led.set(false);
+        else
+            led.set(true);
+    }
+
+    public boolean get() {
+        return led.get();
     }
 
     public void turnOn(){
