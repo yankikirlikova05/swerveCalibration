@@ -61,7 +61,6 @@ public class AutoShoot extends CommandBase {
       SmartDashboard.putNumber("Yaw", yaw);
       SmartDashboard.putNumber("Pitch", pitch);
 
-
     }
   }
 
