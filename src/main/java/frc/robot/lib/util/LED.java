@@ -18,8 +18,7 @@ public class LED {
     public void toggle() {
         if (led.get())
             led.set(false);
-        else
-            led.set(true);
+        else led.set(true);
     }
 
     public boolean get() {

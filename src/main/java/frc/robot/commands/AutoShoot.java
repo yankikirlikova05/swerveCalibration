@@ -69,8 +69,8 @@ public class AutoShoot extends CommandBase {
 
       SmartDashboard.putNumber("Yaw", yaw);
       SmartDashboard.putNumber("Pitch", pitch);
-
-      range = PhotonUtils.calculateDistanceToTargetMeters(
+      // ?
+      /* range = PhotonUtils.calculateDistanceToTargetMeters(
        Constants.CAMERA_HEIGHT_METERS, 
        Constants.TARGET_HEIGHT_METERS,
        Constants.CAMERA_PITCH_RADIANS,
@@ -81,12 +81,20 @@ public class AutoShoot extends CommandBase {
       Pose2d goal = new Pose2d(translation,
         new Rotation2d(result.getBestTarget().getPitch(),result.getBestTarget().getYaw()));
       
-      swerve.goTo(goal);
+      swerve.goTo(goal); */
+      // ?
+
+
+
+
+
+
        /*Pose2D robotPose = PhotonUtils.estimateFieldToRobot(
         Constants.CAMERA_HEIGHT_METERS, Constants.TARGET_HEIGHT_METERS, 
         Constants.CAMERA_PITCH_RADIANS, kTargetPitch, 
         Rotation2d.fromDegrees(-target.getYaw()), swerve.getHeading(), 
         targetPose, cameraToRobot);*/
+      //TODO ADD SETRPM
     }
   }
 

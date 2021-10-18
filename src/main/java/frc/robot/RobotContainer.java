@@ -11,8 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.lib.util.LED;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.ShooterPID;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -26,9 +29,12 @@ public class RobotContainer {
   Swerve swerveDrivetrain = new Swerve(false);
   Joystick driver = new Joystick(0);
   SwerveDriveCommand driveCommand = new SwerveDriveCommand(swerveDrivetrain, driver);
+  LEDSubsystem LED = new LEDSubsystem();
 
+  
   public Shooter shooter = new Shooter();
   public ShooterPID shooterpid = new ShooterPID(shooter);
+  AutoShoot autoShoot = new AutoShoot(LED, shooter, swerveDrivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -47,6 +53,15 @@ public class RobotContainer {
     // new JoystickButton(driver, 3).whileHeld(shooterpid);
 
     swerveDrivetrain.setDefaultCommand(driveCommand);
+    JoystickButton ledButton = new JoystickButton(driver, 1);
+
+    ledButton.whenPressed(new RunCommand(()-> LED.turnOn(), LED));
+    ledButton.whenReleased(
+      new RunCommand(
+        () -> LED.turnOff(),
+        LED)
+    );
+    new JoystickButton(driver,2).whenHeld(autoShoot);
    
   }
 

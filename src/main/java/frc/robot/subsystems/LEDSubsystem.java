@@ -24,4 +24,8 @@ public class LEDSubsystem extends SubsystemBase {
   public void turnOff(){
     led.turnOff();
   }
+
+  public void toggle(){
+    led.toggle();
+  }
 }
