@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase{
         return false;
     }
 
-    // ? decide whether we should use PIDcommand or setRPM in the subsystem
+    // ? Feedforward
     public void setRPM(int rpm){
         double ffOutput = feedforward.calculate(rpm);
         double pidOutput = pid.calculate(getRPM(), rpm);

@@ -14,9 +14,12 @@ import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.lib.util.LED;
 import frc.robot.subsystems.Swerve;
 import frc.robot.commands.AutoShoot;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterPID;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Storage;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +39,12 @@ public class RobotContainer {
   public ShooterPID shooterpid = new ShooterPID(shooter);
   AutoShoot autoShoot = new AutoShoot(LED, shooter, swerveDrivetrain);
 
+  public Intake intake = new Intake();
+  public IntakeCommand intakeCommand = new IntakeCommand(intake);
+
+  public Storage storage = new Storage();
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -51,9 +60,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // commented out because shooter is broken
     // new JoystickButton(driver, 3).whileHeld(shooterpid);
+    // ! Commented for shooter test swerveDrivetrain.setDefaultCommand(driveCommand);
 
-    swerveDrivetrain.setDefaultCommand(driveCommand);
-    JoystickButton ledButton = new JoystickButton(driver, 1);
+  
+    /*JoystickButton ledButton = new JoystickButton(driver, 1);
 
     ledButton.whenPressed(new RunCommand(()-> LED.turnOn(), LED));
     ledButton.whenReleased(
@@ -61,7 +71,18 @@ public class RobotContainer {
         () -> LED.turnOff(),
         LED)
     );
-    new JoystickButton(driver,2).whenHeld(autoShoot);
+    new JoystickButton(driver,2).whenHeld(shooterpid);*/
+
+    //Storage Feed balls
+    new JoystickButton(driver, 3).whileHeld(new RunCommand(()-> storage.bothBackward(), storage));
+    new JoystickButton(driver, 3).whenReleased(new RunCommand(()-> storage.stop(), storage));
+
+    //Storage Reverse
+    new JoystickButton(driver, 4).whileHeld(new RunCommand(()->storage.bothForward(), storage));
+    new JoystickButton(driver,4).whenReleased(new RunCommand(()->storage.stop(), storage));
+    new JoystickButton(driver, 1).whileHeld(intakeCommand);
+
+  
    
   }
 

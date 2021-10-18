@@ -63,6 +63,14 @@ public final class Constants {
 
 	}
 	public static final boolean kGyroReversed = true;
+
+
+
+
+    public static final double INTAKE_SPEED = 0.8;
+    public static final double STORAGE_SPEED = 0;
+	public static final int storageRightPort = 5;
+    public static final int storageLeftPort = 1;
 	
 
 }
