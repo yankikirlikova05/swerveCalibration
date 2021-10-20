@@ -85,8 +85,8 @@ public class Swerve extends SubsystemBase {
   }
 
   public double getHeadingDouble(){
-    return gyroAhrs.getAngle();
-    //return Math.IEEEremainder(gyroAhrs.getAngle(), 360.0) * (Constants.kGyroReversed ? -1.0 : 1.0);
+    //return gyroAhrs.getAngle();
+    return Math.IEEEremainder(gyroAhrs.getAngle(), 360.0) * (Constants.kGyroReversed ? -1.0 : 1.0);
   }
 
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(
@@ -99,12 +99,26 @@ public class Swerve extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       SwerveModule module = modules[i];
       module.resetRotationEncoder();
+      module.resetDriveEncoder();
     }
+  }
+
+  public double getAverageDistance(){
+    /*
+    double sum = 0;
+    for (int i = 0; i < modules.length; i++) {
+      SwerveModule module = modules[i];
+      sum += module.getPosition();
+    }
+    return -sum / 4.0; */
+    return modules[0].getPosition();
   }
 
   public Pose2d getPose(){
     return odometry.getPoseMeters();
   }
+
+  
 
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(
@@ -138,6 +152,12 @@ public class Swerve extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("groAngle", getHeadingDouble());
+
+    SmartDashboard.putNumber("0. modül", modules[0].getPosition());
+    SmartDashboard.putNumber("1. modül", modules[1].getPosition());
+    SmartDashboard.putNumber("2. modül", modules[2].getPosition());
+    SmartDashboard.putNumber("3. modül", modules[3].getPosition());
+    SmartDashboard.putNumber("average Distance", getAverageDistance());
     
     odometry.update(
       getHeading(),

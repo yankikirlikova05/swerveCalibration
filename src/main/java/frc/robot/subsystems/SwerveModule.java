@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Ultrasonic.Unit;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -91,6 +92,11 @@ public class SwerveModule {
     //return Math.IEEEremainder((rotEncoder.get() * 360.0 + offset.getDegrees()), 360.0);
     // ! Offset usage may be wrong
   }
+
+  public double getPosition(){
+    return -driveMotor.getSelectedSensorPosition() / 2048.0 * Math.PI * 2 * Units.inchesToMeters(2);
+  }
+
     // TODO TEST
   public double getDriveMotorRate(){
     return ((driveMotor.getSelectedSensorVelocity() * 10) / 2048.0) * wheelCircumference;
