@@ -6,13 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 public class TurnToAngle extends CommandBase {
   /** Creates a new TurnToAngle. */
   public Swerve swerve;
   double angleSetpoint;
-  PIDController turnPID =  new PIDController(0.001, 0, 0);
+  PIDController turnPID =  new PIDController(0.0075, 0, 0);
 
   public TurnToAngle(Swerve swerve, double angleSetpoint) {
     this.swerve = swerve;
@@ -29,7 +30,7 @@ public class TurnToAngle extends CommandBase {
   public void execute() {
     // ! NOT FIELD RELATIVE
     swerve.drive(0, 0, 
-    turnPID.calculate(swerve.getHeadingDouble(), angleSetpoint)
+    turnPID.calculate(swerve.getHeadingDouble(), angleSetpoint) * Constants.Swerve.kMaxAngularSpeed
     , false);
   }
 

@@ -17,7 +17,7 @@ public class Storage extends SubsystemBase {
   
   public Storage() {
     storageLeft.setInverted(false);
-    storageRight.setInverted(false);
+    storageRight.setInverted(true);
   }
 
   @Override

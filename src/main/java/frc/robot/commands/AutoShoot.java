@@ -36,9 +36,12 @@ public class AutoShoot extends CommandBase {
 
   double range;
 
+  double targetAngle;
+  TurnToAngle turnToAngle;
+
   //TODO ! DISABLE SWERVEDRIVE COMMAND 
-  public AutoShoot(LEDSubsystem led,Shooter shooter, Swerve swerve) {
-    this.led = led;
+  public AutoShoot(Shooter shooter, Swerve swerve,TurnToAngle turnToAngle) {
+    this.turnToAngle = turnToAngle;
     this.shooter = shooter;
     this.swerve = swerve;
 
@@ -78,15 +81,15 @@ public class AutoShoot extends CommandBase {
 
        translation = PhotonUtils.estimateCameraToTargetTranslation(range, Rotation2d.fromDegrees(-target.getYaw()));
 
+       targetAngle = Math.asin(translation.getY()/range);
+
+      /* EKİNİN METHODUYLA İLGİLİ
       Pose2d goal = new Pose2d(translation,
         new Rotation2d(result.getBestTarget().getPitch(),result.getBestTarget().getYaw()));
       
       boolean poseChanged = swerve.goTo(goal);
-
-      //TODO: DECIDE RPM
-      if(poseChanged) shooter.setRPM(6000);
       
-
+      if(poseChanged) shooter.setRPM(6000);
        /*Pose2D robotPose = PhotonUtils.estimateFieldToRobot(
         Constants.CAMERA_HEIGHT_METERS, Constants.TARGET_HEIGHT_METERS, 
         Constants.CAMERA_PITCH_RADIANS, kTargetPitch, 
